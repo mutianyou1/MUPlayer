@@ -38,7 +38,6 @@
     NSURL *videoURL = [[NSBundle mainBundle] URLForResource:@"150511_JiveBike" withExtension:@"mov"];
     //videoURL = [NSURL URLWithString:@"http://zyvideo1.oss-cn-qingdao.aliyuncs.com/zyvd/7c/de/04ec95f4fd42d9d01f63b9683ad0"];
     vc.contentURL = videoURL;
-    
     vc.MUPlayerClose = ^(void){
         vc = nil;
     };

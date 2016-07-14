@@ -171,20 +171,39 @@ static CGFloat kMUVideoViewLeftMargin = 10;
 }
 #pragma mark--privateMthod
 - (void)clickShowToolBar:(UITapGestureRecognizer*)tap{
+   [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(toolViewFade) object:nil];
     if (self.isBarShowing == YES) {
         [self toolViewHide:1.5];
     }else{
+       
        [UIView animateWithDuration:1.5 animations:^{
            self.topBar.alpha = 1.0;
            self.bottomBar.alpha = 1.0;
        } completion:^(BOOL finished) {
            self.isBarShowing = YES;
+           [self hidMethod];
        }];
+      
     }
     
 }
+- (void)hidMethod{
+    if (!self.isBarShowing) {
+        return;
+    }
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(toolViewFade) object:nil];
+    [self performSelector:@selector(toolViewFade) withObject:nil afterDelay:3];
+}
 -(void)toolViewHide:(CGFloat)duration{
     [UIView animateWithDuration:duration animations:^{
+        self.topBar.alpha = 0.0;
+        self.bottomBar.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        self.isBarShowing = NO;
+    }];
+}
+- (void)toolViewFade{
+    [UIView animateWithDuration:5.0 animations:^{
         self.topBar.alpha = 0.0;
         self.bottomBar.alpha = 0.0;
     } completion:^(BOOL finished) {
@@ -200,7 +219,8 @@ static CGFloat kMUVideoViewLeftMargin = 10;
         self.pauseButton.hidden = YES;
     }
     if (duration > 0) {
-         [self toolViewHide:duration];
+         //[self toolViewHide:duration];
+        [self performSelector:@selector(toolViewFade) withObject:nil afterDelay:5];
     }
    
 }
@@ -223,7 +243,6 @@ static CGFloat kMUVideoViewLeftMargin = 10;
 }
 #pragma mark--clickButton
 - (void)videoPlayStatusChanged:(UIButton*)button{
-    [self toolViewHide:1];
     if (button == self.playButton) {
         [self.MUVideoViewDelegate videoViewPlayStatusChangedWithPlay:YES];
         button.hidden = YES;
@@ -240,6 +259,7 @@ static CGFloat kMUVideoViewLeftMargin = 10;
     [self.MUVideoViewDelegate videoViewSliderChangedWithValue:_progressSlider.value withStatus:VideoProgressTapEndValueChanged];
 }
 - (void)videoProgressTapOn{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(toolViewFade) object:nil];
     [self.MUVideoViewDelegate videoViewSliderChangedWithValue:_progressSlider.value withStatus:VideoProgressTap];
 }
 - (void)videoProgressTapEnd{
@@ -258,7 +278,6 @@ static CGFloat kMUVideoViewLeftMargin = 10;
         button.hidden = YES;
         self.fullScreenButton.hidden = NO;
     }
-    [self toolViewHide:1.5];
 }
 
 @end

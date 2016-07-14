@@ -9,6 +9,7 @@
 #import "MUPlayerViewController.h"
 #import "MUVideoView.h"
 #import "AppDelegate.h"
+#import <CoreFoundation/CoreFoundation.h>
 @interface MUPlayerViewController()<MUVideoViewDelegate>{
     UIImageView *_thumbnailImageView;
     NSString *_isPlaying;
@@ -62,8 +63,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playLoadDidChanged:) name:MPMoviePlayerLoadStateDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playReadForPlayDidChanged:) name:MPMoviePlayerReadyForDisplayDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(durationAviableDidChanged:) name:MPMovieDurationAvailableNotification object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(finishRequestThumbnialImage:) name:MPMoviePlayerThumbnailImageRequestDidFinishNotification object:nil];
-  
+   [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(finishRequestThumbnialImage:) name:MPMoviePlayerThumbnailImageRequestDidFinishNotification object:nil];
+   
 }
 - (void)playDidChangedStatus:(NSNotification*)noti{
     if (self.playbackState == MPMoviePlaybackStatePlaying) {
@@ -94,15 +95,12 @@
     
 }
 - (void)finishRequestThumbnialImage:(NSNotification*)noti{
-   NSLog(@"thumbnial%@",noti);
-    
     UIImage *image = [noti.userInfo objectForKey: MPMoviePlayerThumbnailImageKey];
     _thumbnailImageView.image = image;
     _isPlaying = @"NO";
     [self.view addSubview:_thumbnailImageView];
 }
 - (void)requestSourceType:(NSNotification*)noti{
-    NSLog(@"request source%@",noti);
 }
 - (void)startDurationTimer{
     self.durationTimer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(monitorVideoPlayback) userInfo:nil repeats:YES];
@@ -131,12 +129,13 @@
 }
 #pragma mark--videoViewDelegate
 - (void)videoViewChangeToFullScreenWithStatus:(VideoViewStatus)status{
-    NSLog(@"click");
     switch (status) {
         case VideoClose:{
             [self.videoView removeFromSuperview];
-             //self.videoView = nil;
+            self.videoView = nil;
             [self.view removeFromSuperview];
+            [self stop];
+            self.videoView.MUVideoViewDelegate = nil;
             self.MUPlayerClose();
         }
             break;

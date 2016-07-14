@@ -32,7 +32,7 @@
     RealReachability *reachability = (RealReachability*)notification.object;
     ReachabilityStatus status = [reachability currentReachabilityStatus];
     UIAlertView *alerView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您的网络已经断开请检查" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-    NSLog(@"deededeeeeeeee%ld",(long)status);
+  //  NSLog(@"deededeeeeeeee%ld",(long)status);
     switch (status) {
         case RealStatusNotReachable:{
             [alerView show];

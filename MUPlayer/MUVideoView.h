@@ -27,7 +27,7 @@ typedef NS_ENUM(NSInteger,VideoViewStatus){
 - (void)videoViewSliderChangedWithValue:(CGFloat)value withStatus:(VideoViewStatus)status;
 @end
 @interface MUVideoView : UIView
-@property (nonatomic,strong) id <MUVideoViewDelegate> MUVideoViewDelegate;
+@property (nonatomic,weak) id <MUVideoViewDelegate> MUVideoViewDelegate;
 - (void)toolViewHide:(CGFloat)duration hidePlayBtn:(BOOL)hidden;
 - (void)stopIndicatorAnimation:(BOOL)stop;
 - (void)setTimeLableWithText:(NSString*)string;
