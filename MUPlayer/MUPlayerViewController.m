@@ -78,6 +78,7 @@
         }
 
     }else{
+        [self.videoView stopIndicatorAnimation:NO];
         if (_isPlaying.length > 2) {
             [self.videoView toolViewHide:0.0 hidePlayBtn:NO];
             [self endDurationTimer];
