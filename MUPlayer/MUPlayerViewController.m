@@ -13,6 +13,7 @@
 @interface MUPlayerViewController()<MUVideoViewDelegate>{
     UIImageView *_thumbnailImageView;
     NSString *_isPlaying;
+    bool _endFresh;
     CGRect _oringinalRect;
 }
 
@@ -25,6 +26,7 @@
         _oringinalRect = frame;
         self.view.frame = frame;
         _isPlaying = @"NO";
+        _endFresh = YES;
         //自定义控制回放条
         self.controlStyle = MPMovieControlStyleNone;
         self.view.backgroundColor = [UIColor blackColor];
@@ -78,10 +80,13 @@
         }
 
     }else{
-        [self.videoView stopIndicatorAnimation:NO];
+     
         if (_isPlaying.length > 2) {
             [self.videoView toolViewHide:0.0 hidePlayBtn:NO];
             [self endDurationTimer];
+        }
+        if (_endFresh) {
+           [self.videoView stopIndicatorAnimation:NO];
         }
         
     }
@@ -174,6 +179,7 @@
 }
 - (void)videoViewPlayStatusChangedWithPlay:(BOOL)isPlay{
     if (isPlay) {
+        _endFresh = YES;
         if (_isPlaying.length == 2) {
             self.currentPlaybackTime = 0.0;
             _isPlaying = @"YES";
@@ -182,7 +188,9 @@
         }else{
             [self play];
         }
+        
     }else{
+        _endFresh = NO;
        [self pause];
     }
 }
